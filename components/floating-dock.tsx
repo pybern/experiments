@@ -242,11 +242,11 @@ function DockItem({
       <AnimatePresence>
         {isHovered && !isSelected && (
           <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.9 }}
+            initial={{ opacity: 0, y: -8, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.9 }}
+            exit={{ opacity: 0, y: -8, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-neutral-800 px-2.5 py-1 text-xs font-medium text-white shadow-lg"
+            className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-neutral-800 px-2.5 py-1 text-xs font-medium text-white shadow-lg"
           >
             {category}
           </motion.div>
@@ -270,16 +270,6 @@ function DockItem({
         />
       </motion.button>
 
-      {/* Selection indicator */}
-      {isSelected && (
-        <motion.div
-          layoutId="selection-indicator"
-          className="absolute -bottom-2 h-1 w-1 rounded-full bg-neutral-800"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        />
-      )}
     </motion.div>
   )
 }
@@ -294,13 +284,28 @@ export function FloatingDock() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* Selection Card */}
-      <SelectionCard selectedItem={selectedItem} />
+      {/* Primary Header */}
+      <motion.h1
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          delay: 0.1,
+        }}
+        className="text-center text-5xl font-semibold tracking-tight text-neutral-800"
+      >
+        What will we move today?
+      </motion.h1>
+
+      {/* Instruction */}
+      <p className="text-sm text-neutral-500">Select your vehicle</p>
 
       {/* Dock */}
-      <div className="flex h-24 items-end justify-center">
+      <div className="-mt-2 flex h-24 items-start justify-center">
         <motion.div
-          initial={{ y: 40, opacity: 0 }}
+          initial={{ y: -40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{
             type: "spring",
@@ -324,6 +329,9 @@ export function FloatingDock() {
           ))}
         </motion.div>
       </div>
+
+      {/* Selection Card */}
+      <SelectionCard selectedItem={selectedItem} />
     </div>
   )
 }

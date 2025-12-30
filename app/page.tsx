@@ -1,14 +1,22 @@
-import { Header } from "@/components/sec-header";
 import { FloatingDock } from "@/components/floating-dock";
+import { Navbar } from "@/components/navbar";
+import { AboutSection } from "@/components/about-section";
 
 export default function Page() {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center gap-6 bg-neutral-100 py-8">
-      {/* Header Section */}
-      <Header />
+    <main className="bg-neutral-100">
+      {/* Hero Section - Full viewport height */}
+      <section className="relative flex h-screen flex-col items-center">
+        <div className="flex w-full max-w-7xl flex-1 flex-col px-4">
+          <Navbar />
+          <div className="flex flex-1 flex-col items-center justify-center">
+            <FloatingDock />
+          </div>
+        </div>
+      </section>
 
-      {/* Dock Section */}
-      <FloatingDock />
-    </div>
+      {/* About Section */}
+      <AboutSection />
+    </main>
   );
 }
