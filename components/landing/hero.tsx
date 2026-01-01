@@ -1,29 +1,15 @@
-"use client"
-
-import * as React from "react"
-import { motion } from "motion/react"
 import Link from "next/link"
 import { ChevronDownIcon, ArrowRightIcon } from "lucide-react"
 
 export function Hero() {
   return (
     <div className="relative z-10 flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className="max-w-4xl text-center"
-      >
+      <div className="max-w-4xl text-center animate-fade-in-up">
         {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mb-8 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur-md"
-        >
+        <div className="mb-8 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur-md animate-fade-in-scale">
           <span className="flex h-2 w-2 rounded-full bg-emerald-400" />
-          <span className="text-sm font-medium text-white/90">Australia's #1 Vehicle Transport</span>
-        </motion.div>
+          <span className="text-sm font-medium text-white/90">Australia&apos;s #1 Vehicle Transport</span>
+        </div>
 
         {/* Headline */}
         <h1 className="text-5xl font-bold leading-tight tracking-tight text-white md:text-6xl lg:text-7xl">
@@ -40,12 +26,7 @@ export function Hero() {
         </p>
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-10"
-        >
+        <div className="mt-10 animate-fade-in-up-delay">
           <Link
             href="/grid"
             className="group inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-base font-semibold text-neutral-900 transition-all hover:bg-white/90 hover:shadow-2xl hover:shadow-white/20"
@@ -53,26 +34,16 @@ export function Hero() {
             Get Free Quote
             <ArrowRightIcon className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Link>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2"
-        >
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in-delay">
+        <div className="flex flex-col items-center gap-2 animate-bounce-slow">
           <span className="text-xs font-medium uppercase tracking-wider text-white/50">Scroll</span>
           <ChevronDownIcon className="h-5 w-5 text-white/50" />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   )
 }
-

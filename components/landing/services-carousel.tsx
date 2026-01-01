@@ -3,6 +3,7 @@
 import * as React from "react"
 import { motion } from "motion/react"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import { vehicleTypes } from "@/data/vehicle-types"
 
@@ -12,6 +13,8 @@ export function ServicesCarousel() {
   const [activeIndex, setActiveIndex] = React.useState(0)
   const [isAutoCycling, setIsAutoCycling] = React.useState(true)
   const [progress, setProgress] = React.useState(0)
+  const cardRefs = React.useRef<(HTMLDivElement | null)[]>([])
+  const containerRef = React.useRef<HTMLDivElement>(null)
 
   // Auto-cycle effect
   React.useEffect(() => {
@@ -33,14 +36,21 @@ export function ServicesCarousel() {
     return () => clearInterval(progressInterval)
   }, [isAutoCycling, activeIndex])
 
-  // Scroll carousel when active index changes
+  // Scroll carousel when active index changes - use actual card position
   React.useEffect(() => {
-    const container = document.getElementById('carousel')
-    if (container) {
-      // Card width (340px) + gap (16px) = 356px per card
-      // First card position accounts for the left spacer
-      const scrollPosition = activeIndex * 356
-      container.scrollTo({ left: scrollPosition, behavior: 'smooth' })
+    const container = containerRef.current
+    const targetCard = cardRefs.current[activeIndex]
+    
+    if (container && targetCard) {
+      // Get the card's position relative to the container
+      const containerRect = container.getBoundingClientRect()
+      const cardRect = targetCard.getBoundingClientRect()
+      
+      // Calculate scroll position to align card with left edge of container
+      // Account for current scroll position
+      const scrollLeft = container.scrollLeft + (cardRect.left - containerRect.left)
+      
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
     }
   }, [activeIndex])
 
@@ -130,7 +140,7 @@ export function ServicesCarousel() {
 
       {/* Carousel - full width, aligned with header */}
       <div 
-        id="carousel"
+        ref={containerRef}
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto py-4 scrollbar-hide md:snap-none"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
@@ -139,6 +149,7 @@ export function ServicesCarousel() {
           {vehicleTypes.map((item, index) => (
             <div
               key={item.title}
+              ref={(el) => { cardRefs.current[index] = el }}
               className="shrink-0 snap-center"
             >
               {/* Mobile title above card */}
@@ -155,9 +166,11 @@ export function ServicesCarousel() {
               >
                 {/* Image Section */}
                 <div className="relative flex h-44 items-center justify-center bg-white p-6">
-                  <img 
+                  <Image 
                     src={item.image} 
                     alt={item.title}
+                    width={280}
+                    height={140}
                     className="h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   />
                   {/* Subtle gradient overlay */}

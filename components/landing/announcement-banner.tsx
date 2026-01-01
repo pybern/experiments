@@ -1,7 +1,3 @@
-"use client"
-
-import * as React from "react"
-
 const services = [
   "Car Transport",
   "SUV & 4WD Shipping",
