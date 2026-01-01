@@ -35,7 +35,7 @@ export default function LandingPage() {
           src="/backdrop.png"
           alt="Transport background"
           fill
-          preload={true}
+          preload
           quality={85}
           className="object-cover object-center"
           sizes="100vw"

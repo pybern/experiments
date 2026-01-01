@@ -77,7 +77,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        {/* Preload critical assets for faster LCP */}
+        {/* Preload logo */}
         <link
           rel="preload"
           href="/logo.svg"
