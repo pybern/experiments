@@ -15,6 +15,8 @@ import {
   CarFrontIcon,
   PackageIcon,
   CircleEllipsisIcon,
+  ChevronDownIcon,
+  XIcon,
 } from "lucide-react"
 
 const dockItems = [
@@ -25,7 +27,7 @@ const dockItems = [
     image: "/wmx/CARS SUV 4WD.png",
     description: "We offer reliable transport for standard passenger vehicles, ensuring safe and efficient delivery for everyday cars and smaller SUVs.",
     details: ["Sedans", "Hatches", "SUVs", "4Wd's", "Station Wagon", "Utes"],
-    features: "(up to 5.2m long and 1.9m high)"
+    features: "(up to 5.2m long and 1.9m high)",
   },
   {
     icon: TruckIcon,
@@ -34,7 +36,7 @@ const dockItems = [
     image: "/wmx/VANS 4WD.png",
     description: "Specialised transport for vans, oversized passenger vehicles, utility vehicles and mine spec vehicles.",
     details: ["Large SUV's & 4Wds", "Vans", "Cab Chassis", "Mini Bus", "Camper Vans", "Motorhomes", "Utes", "Golf Carts", "ATV's"],
-    features: "(over 5.2m long and 1.9m high)"
+    features: "(over 5.2m long and 1.9m high)",
   },
   {
     icon: CaravanIcon,
@@ -125,7 +127,7 @@ function SelectionCard({
   selectedItem: typeof dockItems[0] | null 
 }) {
   return (
-    <div className="relative flex h-[420px] flex-col items-center px-4">
+    <div className="relative flex min-h-[380px] w-full flex-col items-center px-4 sm:min-h-[420px]">
       <AnimatePresence mode="wait" initial={false}>
         {selectedItem && (
           <motion.div
@@ -142,9 +144,9 @@ function SelectionCard({
             }}
             className="h-full w-full max-w-2xl"
           >
-            <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-xl shadow-neutral-200/50">
+            <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-xl shadow-neutral-200/50 sm:rounded-3xl">
               {/* Image Section */}
-              <div className="relative flex h-44 shrink-0 items-center justify-center bg-white p-4">
+              <div className="relative flex h-32 shrink-0 items-center justify-center bg-white p-3 sm:h-44 sm:p-4">
                 <img 
                   src={selectedItem.image} 
                   alt={selectedItem.category}
@@ -155,31 +157,31 @@ function SelectionCard({
               </div>
               
               {/* Content Section */}
-              <div className="flex flex-1 flex-col overflow-hidden p-6">
+              <div className="flex flex-1 flex-col overflow-hidden p-4 sm:p-6">
                 {/* Title */}
-                <h3 className="text-xl font-semibold text-neutral-900">
+                <h3 className="text-lg font-semibold text-neutral-900 sm:text-xl">
                   {selectedItem.category}
                 </h3>
                 
                 {/* Features badge */}
                 {selectedItem.features && (
-                  <span className="mt-2 inline-block self-start rounded-full bg-pink-100 px-3 py-1 text-xs font-medium text-pink-700">
+                  <span className="mt-2 inline-block self-start rounded-full bg-pink-100 px-2.5 py-0.5 text-[10px] font-medium text-pink-700 sm:px-3 sm:py-1 sm:text-xs">
                     {selectedItem.features}
                   </span>
                 )}
                 
                 {/* Description */}
-                <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-neutral-600">
+                <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-neutral-600 sm:mt-3 sm:line-clamp-2 sm:text-sm">
                   {selectedItem.description}
                 </p>
                 
                 {/* Details */}
-                <div className="mt-auto pt-4">
-                  <div className="flex flex-wrap gap-2">
+                <div className="mt-auto pt-3 sm:pt-4">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {selectedItem.details.map((detail) => (
                       <span 
                         key={detail}
-                        className="rounded-lg border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-xs font-medium text-neutral-600"
+                        className="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[10px] font-medium text-neutral-600 sm:rounded-lg sm:px-2.5 sm:py-1 sm:text-xs"
                       >
                         {detail}
                       </span>
@@ -259,7 +261,7 @@ function DockItem({
         className={`flex h-full w-full cursor-pointer items-center justify-center rounded-full border transition-colors ${
           isSelected
             ? "border-neutral-800 bg-neutral-800 text-white"
-            : "border-neutral-300 bg-neutral-200 text-neutral-600 hover:bg-neutral-300 hover:text-neutral-900"
+            : "border-neutral-200 bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-neutral-700"
         }`}
         whileTap={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -274,16 +276,196 @@ function DockItem({
   )
 }
 
-export function FloatingDock() {
-  const mouseX = useMotionValue(Infinity)
-  const [selectedItem, setSelectedItem] = React.useState<typeof dockItems[0] | null>(dockItems[0])
+// Mobile menu item component for fullscreen menu
+function MobileMenuItem({
+  item,
+  isSelected,
+  onClick,
+  index,
+}: {
+  item: typeof dockItems[0]
+  isSelected: boolean
+  onClick: () => void
+  index: number
+}) {
+  const Icon = item.icon
+  
+  return (
+    <motion.button
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 12 }}
+      transition={{ delay: index * 0.02, duration: 0.2, ease: "easeOut" }}
+      onClick={onClick}
+      className={`group flex w-full items-center gap-4 border-b border-neutral-100 px-2 py-4 text-left transition-all active:bg-neutral-50 ${
+        isSelected ? "text-neutral-900" : "text-neutral-600"
+      }`}
+    >
+      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors ${
+        isSelected 
+          ? "bg-neutral-800 text-white" 
+          : "bg-neutral-100 text-neutral-500 group-active:bg-neutral-200"
+      }`}>
+        <Icon className="h-5 w-5" strokeWidth={1.5} />
+      </div>
+      <span className={`flex-1 text-[15px] ${isSelected ? "font-semibold" : "font-medium"}`}>
+        {item.category}
+      </span>
+      {isSelected && (
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-800"
+        >
+          <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </motion.div>
+      )}
+    </motion.button>
+  )
+}
+
+// Fullscreen mobile menu
+function MobileMenu({
+  selectedItem,
+  onItemClick,
+}: {
+  selectedItem: typeof dockItems[0] | null
+  onItemClick: (item: typeof dockItems[0]) => void
+}) {
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  // Lock body scroll when menu is open
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
 
   const handleItemClick = (item: typeof dockItems[0]) => {
-    setSelectedItem(selectedItem?.category === item.category ? null : item)
+    onItemClick(item)
+    setIsOpen(false)
   }
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <>
+      {/* Toggle Button - Minimal pill style */}
+      <div className="flex w-full justify-center px-4">
+        <motion.button
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{
+            type: "spring",
+            stiffness: 200,
+            damping: 20,
+            delay: 0.2,
+          }}
+          onClick={() => setIsOpen(true)}
+          className="flex items-center gap-3 rounded-full bg-neutral-900 py-3 pl-4 pr-5 shadow-xl shadow-neutral-900/20 active:scale-[0.98]"
+        >
+          {selectedItem ? (
+            <>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
+                <selectedItem.icon className="h-4 w-4 text-white" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-medium text-white">{selectedItem.category}</span>
+            </>
+          ) : (
+            <>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
+                <CarIcon className="h-4 w-4 text-white" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-medium text-white">Select vehicle</span>
+            </>
+          )}
+          <ChevronDownIcon className="h-4 w-4 text-white/60" />
+        </motion.button>
+      </div>
+
+      {/* Fullscreen Menu Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 z-50 flex flex-col bg-white"
+          >
+            {/* Header - Minimal */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.05, duration: 0.2 }}
+              className="flex shrink-0 items-center justify-between px-4 pb-2 pt-4"
+            >
+              <h2 className="text-xl font-semibold text-neutral-900">Select vehicle</h2>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-full transition-colors active:bg-neutral-100"
+              >
+                <XIcon className="h-6 w-6 text-neutral-400" />
+              </button>
+            </motion.div>
+            
+            {/* Scrollable List */}
+            <div className="flex-1 overflow-y-auto px-4">
+              <div className="flex flex-col">
+                {dockItems.map((item, index) => (
+                  <MobileMenuItem
+                    key={item.category}
+                    item={item}
+                    isSelected={selectedItem?.category === item.category}
+                    onClick={() => handleItemClick(item)}
+                    index={index}
+                  />
+                ))}
+              </div>
+              {/* Bottom padding for safe area */}
+              <div className="h-10" />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}
+
+export function FloatingDock() {
+  const mouseX = useMotionValue(Infinity)
+  const [selectedItem, setSelectedItem] = React.useState<typeof dockItems[0] | null>(dockItems[0])
+  const [isAutoCycling, setIsAutoCycling] = React.useState(true)
+
+  const handleItemClick = (item: typeof dockItems[0]) => {
+    setIsAutoCycling(false) // Stop auto-cycle when user interacts
+    setSelectedItem(selectedItem?.category === item.category ? null : item)
+  }
+
+  // Auto-cycle effect
+  React.useEffect(() => {
+    if (!isAutoCycling) return
+
+    const interval = setInterval(() => {
+      setSelectedItem((current) => {
+        const currentIndex = current 
+          ? dockItems.findIndex((item) => item.category === current.category)
+          : -1
+        const nextIndex = (currentIndex + 1) % dockItems.length
+        return dockItems[nextIndex]
+      })
+    }, 3000) // Cycle every 3 seconds
+
+    return () => clearInterval(interval)
+  }, [isAutoCycling])
+
+  return (
+    <div className="flex w-full flex-col items-center gap-4">
       {/* Primary Header */}
       <motion.h1
         initial={{ opacity: 0, y: 20 }}
@@ -294,40 +476,50 @@ export function FloatingDock() {
           damping: 20,
           delay: 0.1,
         }}
-        className="text-center text-5xl font-semibold tracking-tight text-neutral-800"
+        className="text-center text-3xl font-semibold tracking-tight text-neutral-800 sm:text-4xl md:text-5xl"
       >
         What will we move today?
       </motion.h1>
 
       {/* Instruction */}
-      <p className="text-sm text-neutral-500">Select your vehicle</p>
+      <p className="text-sm font-medium">Select from 12 different vehicles</p>
 
-      {/* Dock */}
-      <div className="-mt-2 flex h-24 items-start justify-center">
-        <motion.div
-          initial={{ y: -40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            type: "spring",
-            stiffness: 200,
-            damping: 20,
-            delay: 0.2,
-          }}
-          onMouseMove={(e) => mouseX.set(e.pageX)}
-          onMouseLeave={() => mouseX.set(Infinity)}
-          className="flex items-end gap-3 rounded-3xl border border-neutral-200/80 bg-white/80 px-5 py-4 shadow-lg shadow-neutral-200/50 backdrop-blur-sm"
-        >
-          {dockItems.map((item) => (
-            <DockItem
-              key={item.category}
-              icon={item.icon}
-              category={item.category}
-              mouseX={mouseX}
-              isSelected={selectedItem?.category === item.category}
-              onClick={() => handleItemClick(item)}
-            />
-          ))}
-        </motion.div>
+      {/* Desktop Dock - Hidden on mobile */}
+      <div className="hidden md:block">
+        <div className="-mt-2 flex h-24 items-start justify-center">
+          <motion.div
+            initial={{ y: -40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+              delay: 0.2,
+            }}
+            onMouseMove={(e) => mouseX.set(e.pageX)}
+            onMouseLeave={() => mouseX.set(Infinity)}
+            className="flex items-end gap-3 rounded-3xl border border-neutral-200/80 bg-white/80 px-5 py-4 shadow-lg shadow-neutral-200/50 backdrop-blur-sm"
+          >
+            {dockItems.map((item) => (
+              <DockItem
+                key={item.category}
+                icon={item.icon}
+                category={item.category}
+                mouseX={mouseX}
+                isSelected={selectedItem?.category === item.category}
+                onClick={() => handleItemClick(item)}
+              />
+            ))}
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Mobile Menu - Shown only on mobile */}
+      <div className="w-full md:hidden">
+        <MobileMenu
+          selectedItem={selectedItem}
+          onItemClick={handleItemClick}
+        />
       </div>
 
       {/* Selection Card */}

@@ -1,22 +1,35 @@
-import { FloatingDock } from "@/components/floating-dock";
-import { Navbar } from "@/components/navbar";
-import { AboutSection } from "@/components/about-section";
+"use client"
 
-export default function Page() {
+import { AnnouncementBanner } from "@/components/landing/announcement-banner"
+import { Header } from "@/components/landing/header"
+import { Hero } from "@/components/landing/hero"
+import { ServicesCarousel } from "@/components/landing/services-carousel"
+import { Features } from "@/components/landing/features"
+import { Footer } from "@/components/landing/footer"
+
+export default function LandingPage() {
   return (
-    <main className="bg-neutral-100">
-      {/* Hero Section - Full viewport height */}
-      <section className="relative flex h-screen flex-col items-center">
-        <div className="flex w-full max-w-7xl flex-1 flex-col px-4">
-          <Navbar />
-          <div className="flex flex-1 flex-col items-center justify-center">
-            <FloatingDock />
-          </div>
-        </div>
-      </section>
+    <div className="relative min-h-screen">
+      {/* Announcement Banner */}
+      <AnnouncementBanner />
 
-      {/* About Section */}
-      <AboutSection />
-    </main>
-  );
+      {/* Spacer between banner and header */}
+      <div className="relative z-20 h-4" />
+
+      {/* Background Image */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/backdrop.png')" }}
+      />
+      
+      {/* Gradient Overlay for readability */}
+      <div className="fixed inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
+
+      <Header />
+      <Hero />
+      <ServicesCarousel />
+      <Features />
+      <Footer />
+    </div>
+  )
 }

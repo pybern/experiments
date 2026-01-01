@@ -1,0 +1,77 @@
+export const vehicleTypes = [
+  {
+    image: "/wmx/CARS SUV 4WD.png",
+    title: "Cars, SUV's & 4WD's",
+    description: "Reliable transport for standard passenger vehicles, ensuring safe and efficient delivery for everyday cars and smaller SUVs.",
+    details: "Sedans • Hatches • SUVs • 4WDs • Station Wagons • Utes",
+  },
+  {
+    image: "/wmx/VANS 4WD.png",
+    title: "Oversized Vehicles",
+    description: "Specialised transport for vans, oversized passenger vehicles, utility vehicles and mine spec vehicles.",
+    details: "Large SUVs • Vans • Cab Chassis • Mini Bus • Camper Vans",
+  },
+  {
+    image: "/wmx/CARAVANS CAMPERVANS.png",
+    title: "Caravan & Campers",
+    description: "All towable items including camper trailers, caravans and 5th wheelers for your next adventure.",
+    details: "Caravans • Camper Trailers • 5th Wheelers • Motorhomes",
+  },
+  {
+    image: "/wmx/BUSES TRUCKS.png",
+    title: "Trucks & Buses",
+    description: "Heavy-duty transport solutions for commercial trucks and passenger buses across Australia.",
+    details: "Trucks • Buses • Tautliners • Semi Trailers • Rigids",
+  },
+  {
+    image: "/wmx/TRAILERS.png",
+    title: "Trailers & Towables",
+    description: "Secure transport for various trailers and towable equipment, ideal for construction and recreation.",
+    details: "Trailers • Semi Trailers • Curtain Siders • Tankers",
+  },
+  {
+    image: "/wmx/MOTORBIKES.png",
+    title: "Motorbikes & Quads",
+    description: "Dedicated personalised service for two-wheeled bikes, quads and trikes. Fully enclosed transport.",
+    details: "Motorcycles • Quads • Trikes • eBikes • Bicycles",
+  },
+  {
+    image: "/wmx/MINING HEAVY MACHINERY.png",
+    title: "Heavy Machinery",
+    description: "Robust transport for mining and heavy industrial machinery, handling extreme weights and sizes.",
+    details: "Excavators • Cranes • Tractors • Bulldozers • Bobcats",
+  },
+  {
+    image: "/wmx/JETSKIS BOATS.png",
+    title: "Boats & Jet Skis",
+    description: "Fully enclosed specialised transport for trailered boats and jet skis to any destination.",
+    details: "Boats on Trailer • Jet Skis on Trailer",
+  },
+  {
+    image: "/wmx/FORKLIFTS.png",
+    title: "Forklifts & Cranes",
+    description: "Any industrial lifting equipment for warehouses and construction sites. If it has wheels, we move it.",
+    details: "Forklifts • Stackers • Telehandlers • Cherry Pickers",
+  },
+  {
+    image: "/wmx/SALAVAGE.png",
+    title: "Salvage Vehicles",
+    description: "Transport for damaged or non-operational vehicles, including salvage operations from auction yards.",
+    details: "Cars • SUVs • Trucks • Motorbikes • Vans",
+  },
+  {
+    image: "/wmx/GENERAL FRIEGHT CONTAINERS.png",
+    title: "General Freight",
+    description: "Versatile freight services for containers and general palletised cargo. From envelopes to containers.",
+    details: "Pallets • Containers • Boxes • Air Freight",
+  },
+  {
+    image: "/wmx/OTHER.png",
+    title: "Other Items",
+    description: "For all the items we can't list! If it's moveable, we have a solution. Helicopters to train carriages.",
+    details: "Custom Solutions • Specialty Transport",
+  },
+]
+
+export type VehicleType = typeof vehicleTypes[number]
+

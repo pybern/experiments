@@ -13,7 +13,7 @@ const stats = [
 
 export function AboutSection() {
   return (
-    <section className="min-h-screen bg-[#fdf2f0] px-6 py-20 md:px-12 lg:px-24">
+    <section className="min-h-screen px-6 py-20 md:px-12 lg:px-24">
       <div className="mx-auto max-w-6xl">
         {/* Header with About label and logo */}
         <motion.div
