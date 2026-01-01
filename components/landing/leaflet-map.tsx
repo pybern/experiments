@@ -30,6 +30,9 @@ function MarkerStateSync({ selectedHub }: { selectedHub: string | null }) {
         const dot = marker.querySelector('.marker-dot')
         const label = marker.querySelector('.marker-label')
         
+        // Get the Leaflet marker icon parent element to adjust z-index
+        const leafletMarker = marker.closest('.leaflet-marker-icon') as HTMLElement | null
+        
         if (city === selectedHub) {
           marker.classList.remove('marker-unselected')
           marker.classList.add('marker-selected')
@@ -37,6 +40,10 @@ function MarkerStateSync({ selectedHub }: { selectedHub: string | null }) {
           dot?.classList.add('marker-selected')
           label?.classList.remove('marker-unselected')
           label?.classList.add('marker-selected')
+          // Bring selected marker to front
+          if (leafletMarker) {
+            leafletMarker.style.zIndex = '1000'
+          }
         } else {
           marker.classList.remove('marker-selected')
           marker.classList.add('marker-unselected')
@@ -44,6 +51,10 @@ function MarkerStateSync({ selectedHub }: { selectedHub: string | null }) {
           dot?.classList.add('marker-unselected')
           label?.classList.remove('marker-selected')
           label?.classList.add('marker-unselected')
+          // Reset z-index for non-selected markers
+          if (leafletMarker) {
+            leafletMarker.style.zIndex = ''
+          }
         }
       })
     }
