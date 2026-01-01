@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
@@ -19,56 +19,49 @@ interface LeafletMapProps {
   hubDescriptions: Record<string, string>
 }
 
-// Custom marker icons with labels
-const createIcon = (city: string, isSelected: boolean) => {
-  const size = isSelected ? 28 : 20
-  const bgColor = isSelected ? "#be185d" : "#be185d"
-  const borderWidth = isSelected ? 4 : 3
-  
-  return L.divIcon({
-    className: "custom-marker-with-label",
-    html: `
-      <div style="
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transform: translateX(-50%);
-        cursor: pointer;
-      ">
-        <div style="
-          width: ${size}px;
-          height: ${size}px;
-          background-color: ${bgColor};
-          border: ${borderWidth}px solid white;
-          border-radius: 50%;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-          ${isSelected ? 'box-shadow: 0 0 0 4px rgba(190, 24, 93, 0.3), 0 2px 8px rgba(0,0,0,0.3);' : 'animation: pulse 2s infinite;'}
-          transition: all 0.2s ease;
-        "></div>
-        <div style="
-          margin-top: 4px;
-          padding: ${isSelected ? '4px 10px' : '3px 8px'};
-          background: ${isSelected ? '#be185d' : 'white'};
-          border-radius: 4px;
-          font-size: ${isSelected ? '13px' : '12px'};
-          font-weight: 600;
-          color: ${isSelected ? 'white' : '#171717'};
-          white-space: nowrap;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-          font-family: system-ui, -apple-system, sans-serif;
-          transition: all 0.2s ease;
-        ">${city}</div>
-      </div>
-      <style>
-        @keyframes pulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(190, 24, 93, 0.4); }
-          50% { box-shadow: 0 0 0 10px rgba(190, 24, 93, 0); }
+// Component to sync marker selection state with DOM via data attributes
+function MarkerStateSync({ selectedHub }: { selectedHub: string | null }) {
+  useEffect(() => {
+    // Use requestAnimationFrame for smooth visual updates
+    const updateMarkers = () => {
+      const markers = document.querySelectorAll('.marker-container')
+      markers.forEach((marker) => {
+        const city = marker.getAttribute('data-city')
+        const dot = marker.querySelector('.marker-dot')
+        const label = marker.querySelector('.marker-label')
+        
+        if (city === selectedHub) {
+          marker.classList.remove('marker-unselected')
+          marker.classList.add('marker-selected')
+          dot?.classList.remove('marker-unselected')
+          dot?.classList.add('marker-selected')
+          label?.classList.remove('marker-unselected')
+          label?.classList.add('marker-selected')
+        } else {
+          marker.classList.remove('marker-selected')
+          marker.classList.add('marker-unselected')
+          dot?.classList.remove('marker-selected')
+          dot?.classList.add('marker-unselected')
+          label?.classList.remove('marker-selected')
+          label?.classList.add('marker-unselected')
         }
-      </style>
-    `,
-    iconSize: [0, 0],
-    iconAnchor: [0, 10],
-  })
+      })
+    }
+    
+    // Run immediately
+    updateMarkers()
+    // Also run on next frame to catch late renders
+    const rafId = requestAnimationFrame(updateMarkers)
+    // And run after a small delay for initial load
+    const timerId = setTimeout(updateMarkers, 200)
+    
+    return () => {
+      cancelAnimationFrame(rafId)
+      clearTimeout(timerId)
+    }
+  }, [selectedHub])
+  
+  return null
 }
 
 // Component to set zoom after map loads
@@ -90,6 +83,26 @@ export default function LeafletMap({ hubs, hubRoutes, hubDescriptions }: Leaflet
   const [isMounted, setIsMounted] = useState(false)
   const [selectedHub, setSelectedHub] = useState<string | null>("Sydney")
   const [isMobile, setIsMobile] = useState(false)
+  const [hasInteracted, setHasInteracted] = useState(false)
+
+  // Create stable icons for each hub - memoized to prevent recreation
+  const hubIcons = useMemo(() => {
+    const icons: Record<string, L.DivIcon> = {}
+    hubs.forEach((hub) => {
+      icons[hub.city] = L.divIcon({
+        className: 'custom-marker-wrapper',
+        html: `
+          <div class="marker-container marker-unselected" data-city="${hub.city}">
+            <div class="marker-dot marker-unselected"></div>
+            <div class="marker-label marker-unselected">${hub.city}</div>
+          </div>
+        `,
+        iconSize: [0, 0],
+        iconAnchor: [0, 10],
+      })
+    })
+    return icons
+  }, [hubs])
 
   useEffect(() => {
     setIsMounted(true)
@@ -99,6 +112,27 @@ export default function LeafletMap({ hubs, hubRoutes, hubDescriptions }: Leaflet
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  // Auto-rotate through hubs until user interacts
+  useEffect(() => {
+    if (hasInteracted || !isMounted) return
+
+    const hubCities = hubs.map(h => h.city)
+    let currentIndex = hubCities.indexOf(selectedHub || "Sydney")
+
+    const interval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % hubCities.length
+      setSelectedHub(hubCities[currentIndex])
+    }, 3000) // Rotate every 3 seconds
+
+    return () => clearInterval(interval)
+  }, [hasInteracted, isMounted, hubs, selectedHub])
+
+  // Handle user interaction - stops auto-rotation
+  const handleHubSelect = (city: string) => {
+    setHasInteracted(true)
+    setSelectedHub(city)
+  }
 
   if (!isMounted) {
     return (
@@ -117,13 +151,16 @@ export default function LeafletMap({ hubs, hubRoutes, hubDescriptions }: Leaflet
   return (
     <div className="flex flex-col md:flex-row w-full">
       {/* Details Panel - Below on mobile, Left side on desktop */}
-      <div className="order-2 md:order-1 w-full md:w-72 bg-white md:bg-white/80 md:backdrop-blur-md flex flex-col shrink-0 border-t md:border-t-0 md:border-r border-neutral-200">
+      <div className="order-2 md:order-1 w-full md:w-72 bg-white md:bg-white/80 md:backdrop-blur-md flex flex-col shrink-0 border-t md:border-t-0 md:border-r border-neutral-200 overflow-hidden">
         {selectedHub ? (
-          <>
+          <div 
+            key={selectedHub} 
+            className="flex flex-col flex-1 animate-map-fade-in"
+          >
             {/* Hub Header */}
             <div className="p-4 md:p-5 border-b border-neutral-100">
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-3 h-3 rounded-full bg-pink-700" />
+                <div className="w-3 h-3 rounded-full bg-pink-700 animate-pulse" />
                 <span className="text-xs font-medium text-neutral-400 uppercase tracking-wide">
                   {selectedHubData?.state} Hub
                 </span>
@@ -140,8 +177,9 @@ export default function LeafletMap({ hubs, hubRoutes, hubDescriptions }: Leaflet
               <div className="space-y-1">
                 {routes.map((route, idx) => (
                   <div
-                    key={idx}
-                    className="flex items-center gap-4 py-2 md:py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer group"
+                    key={`${selectedHub}-${route.to}`}
+                    className="flex items-center gap-4 py-2 md:py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition-all duration-300 cursor-pointer group animate-map-slide-in"
+                    style={{ animationDelay: `${idx * 50}ms` }}
                   >
                     <span className="text-sm font-medium text-neutral-900 w-24">
                       {route.to}
@@ -160,7 +198,7 @@ export default function LeafletMap({ hubs, hubRoutes, hubDescriptions }: Leaflet
                 Get Quote from {selectedHub}
               </button>
             </div>
-          </>
+          </div>
         ) : (
           <div className="flex-1 flex items-center justify-center p-5">
             <p className="text-neutral-400 text-center">
@@ -168,6 +206,7 @@ export default function LeafletMap({ hubs, hubRoutes, hubDescriptions }: Leaflet
             </p>
           </div>
         )}
+        
       </div>
 
       {/* Map */}
@@ -186,15 +225,16 @@ export default function LeafletMap({ hubs, hubRoutes, hubDescriptions }: Leaflet
           />
           
           <SetView isMobile={isMobile} />
+          <MarkerStateSync selectedHub={selectedHub} />
           
           {hubs.map((hub) => (
             <Marker
               key={hub.city}
               position={[hub.lat, hub.lng]}
-              icon={createIcon(hub.city, hub.city === selectedHub)}
+              icon={hubIcons[hub.city]}
               eventHandlers={{
-                mouseover: () => setSelectedHub(hub.city),
-                click: () => setSelectedHub(hub.city),
+                mouseover: () => handleHubSelect(hub.city),
+                click: () => handleHubSelect(hub.city),
               }}
             />
           ))}
