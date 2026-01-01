@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useRef } from "react"
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
@@ -113,20 +113,29 @@ export default function LeafletMap({ hubs, hubRoutes, hubDescriptions }: Leaflet
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
+  // Track rotation index via ref to avoid dependency cycle
+  const rotationIndexRef = useRef(0)
+
+  // Initialize rotation index when hubs change
+  useEffect(() => {
+    const hubCities = hubs.map(h => h.city)
+    rotationIndexRef.current = hubCities.indexOf("Sydney")
+    if (rotationIndexRef.current === -1) rotationIndexRef.current = 0
+  }, [hubs])
+
   // Auto-rotate through hubs until user interacts
   useEffect(() => {
     if (hasInteracted || !isMounted) return
 
     const hubCities = hubs.map(h => h.city)
-    let currentIndex = hubCities.indexOf(selectedHub || "Sydney")
 
     const interval = setInterval(() => {
-      currentIndex = (currentIndex + 1) % hubCities.length
-      setSelectedHub(hubCities[currentIndex])
+      rotationIndexRef.current = (rotationIndexRef.current + 1) % hubCities.length
+      setSelectedHub(hubCities[rotationIndexRef.current])
     }, 3000) // Rotate every 3 seconds
 
     return () => clearInterval(interval)
-  }, [hasInteracted, isMounted, hubs, selectedHub])
+  }, [hasInteracted, isMounted, hubs])
 
   // Handle user interaction - stops auto-rotation
   const handleHubSelect = (city: string) => {
