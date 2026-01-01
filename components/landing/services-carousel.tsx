@@ -171,6 +171,7 @@ export function ServicesCarousel() {
                     alt={item.title}
                     width={280}
                     height={140}
+                    quality={85}
                     className="h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   />
                   {/* Subtle gradient overlay */}
