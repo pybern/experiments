@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { ChevronDownIcon, ArrowRightIcon } from "lucide-react"
+import { ChevronDownIcon } from "lucide-react"
+import { LiquidMetalButton } from "./liquid-metal-button"
 
 export function Hero() {
   return (
@@ -25,15 +25,11 @@ export function Hero() {
           From cars to heavy machinery, we move anything with wheels across Australia. Fast, safe, and fully insured.
         </p>
 
-        {/* CTA */}
-        <div className="mt-10 animate-fade-in-up-delay">
-          <Link
-            href="/grid"
-            className="group inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-base font-semibold text-neutral-900 transition-all hover:bg-white/90 hover:shadow-2xl hover:shadow-white/20"
-          >
-            Get Free Quote
-            <ArrowRightIcon className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-          </Link>
+        {/* CTA - hidden on mobile since header has quote button */}
+        <div className="mt-10 hidden animate-fade-in-up-delay md:block">
+          <LiquidMetalButton href="/grid" size="lg">
+            Get Quote
+          </LiquidMetalButton>
         </div>
       </div>
 

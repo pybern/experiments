@@ -17,6 +17,16 @@ const Features = dynamic(
   { ssr: true }
 )
 
+const Testimonials = dynamic(
+  () => import("@/components/landing/testimonials").then((mod) => mod.Testimonials),
+  { ssr: true }
+)
+
+const AustraliaMap = dynamic(
+  () => import("@/components/landing/australia-map").then((mod) => mod.AustraliaMap),
+  { ssr: true }
+)
+
 export default function LandingPage() {
   return (
     <div className="relative min-h-screen">
@@ -49,6 +59,8 @@ export default function LandingPage() {
       <Hero />
       <ServicesCarousel />
       <Features />
+      <Testimonials />
+      <AustraliaMap />
       <Footer />
     </div>
   )

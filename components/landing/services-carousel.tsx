@@ -36,20 +36,16 @@ export function ServicesCarousel() {
     return () => clearInterval(progressInterval)
   }, [isAutoCycling, activeIndex])
 
-  // Scroll carousel when active index changes - use actual card position
+  // Scroll carousel when active index changes
+  // All cards should align to the same position as the first card (aligned with header content)
   React.useEffect(() => {
     const container = containerRef.current
     const targetCard = cardRefs.current[activeIndex]
+    const firstCard = cardRefs.current[0]
     
-    if (container && targetCard) {
-      // Get the card's position relative to the container
-      const containerRect = container.getBoundingClientRect()
-      const cardRect = targetCard.getBoundingClientRect()
-      
-      // Calculate scroll position to align card with left edge of container
-      // Account for current scroll position
-      const scrollLeft = container.scrollLeft + (cardRect.left - containerRect.left)
-      
+    if (container && targetCard && firstCard) {
+      // Scroll so that targetCard appears at the same position as firstCard at scroll=0
+      const scrollLeft = targetCard.offsetLeft - firstCard.offsetLeft
       container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
     }
   }, [activeIndex])
@@ -144,8 +140,8 @@ export function ServicesCarousel() {
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto py-4 scrollbar-hide md:snap-none"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        {/* Left spacer - centers card on mobile, aligns with content on desktop */}
-        <div className="shrink-0 w-[calc(50vw-170px-8px)] md:w-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]" />
+        {/* Left spacer - centers card on mobile, aligns with content on desktop (accounting for gap-4) */}
+        <div className="shrink-0 w-[calc(50vw-170px-8px)] md:w-[max(0.5rem,calc((100vw-80rem)/2+0.5rem))]" />
           {vehicleTypes.map((item, index) => (
             <div
               key={item.title}
@@ -220,7 +216,7 @@ export function ServicesCarousel() {
         </Link>
         
         {/* Right spacer */}
-        <div className="shrink-0 w-[calc(50vw-170px-8px)] md:w-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]" />
+        <div className="shrink-0 w-[calc(50vw-170px-8px)] md:w-[max(0.5rem,calc((100vw-80rem)/2+0.5rem))]" />
       </div>
 
       {/* Mobile See All button */}
