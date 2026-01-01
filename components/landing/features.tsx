@@ -73,7 +73,7 @@ export function Features() {
           className="mb-20"
         >
           <h2 className="max-w-4xl text-3xl font-medium leading-tight text-neutral-900 md:text-4xl lg:text-5xl">
-            We provide reliable, <span className="text-rose-400">fully-insured</span> transport 
+            We provide reliable, <span className="text-rose-600">fully-insured</span> transport 
             for vehicles and machinery across Australia, from city streets to remote locations.
           </h2>
         </motion.div>
@@ -83,7 +83,7 @@ export function Features() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mb-12 text-sm font-medium tracking-wide text-neutral-400"
+          className="mb-12 text-sm font-medium tracking-wide text-neutral-600"
         >
           Why Choose Us
         </motion.p>
@@ -104,14 +104,14 @@ export function Features() {
                 <p className="text-sm leading-relaxed text-neutral-500 md:text-base">
                   {feature.description}
                 </p>
-                <p className="mt-3 text-xs font-medium text-neutral-300">
+                <p className="mt-3 text-xs font-medium text-neutral-500">
                   /{feature.index}
                 </p>
               </div>
 
               {/* Icon */}
               <div className="col-span-3 flex justify-center md:col-span-2">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-neutral-50 text-neutral-300 md:h-16 md:w-16">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-neutral-100 text-neutral-500 md:h-16 md:w-16">
                   <feature.icon className="h-6 w-6 md:h-8 md:w-8" strokeWidth={1.5} />
                 </div>
               </div>
