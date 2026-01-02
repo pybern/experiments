@@ -58,8 +58,8 @@ export function Header() {
           ))}
         </div>
 
-        {/* Get Quote - centered on mobile, right on desktop */}
-        <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 animate-slide-in-right md:animate-none">
+        {/* Get Quote - desktop only (mobile shows in hero) */}
+        <div className="hidden md:block animate-slide-in-right">
           <LiquidMetalButton href="/grid" size="sm">
             Get Quote
           </LiquidMetalButton>
