@@ -4,6 +4,7 @@ import { AnnouncementBanner } from "@/components/landing/announcement-banner"
 import { Header } from "@/components/landing/header"
 import { Hero } from "@/components/landing/hero"
 import { Footer } from "@/components/landing/footer"
+import { MobileFooter } from "@/components/landing/mobile-footer"
 import { StructuredData } from "@/components/landing/structured-data"
 
 // Lazy load below-the-fold components for better initial page load
@@ -36,9 +37,6 @@ export default function LandingPage() {
       {/* Announcement Banner */}
       <AnnouncementBanner />
 
-      {/* Spacer between banner and header */}
-      <div className="relative z-20 h-4" />
-
       {/* Background Image - Optimized with Next.js Image */}
       <div className="fixed inset-0">
         <Image
@@ -62,6 +60,9 @@ export default function LandingPage() {
       <Testimonials />
       <AustraliaMap />
       <Footer />
+      
+      {/* Mobile Floating Footer with CTA and Menu */}
+      <MobileFooter />
     </div>
   )
 }
