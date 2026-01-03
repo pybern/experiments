@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { Suspense } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { PlusIcon, CheckIcon, ArrowLeftIcon, SearchIcon, XIcon } from "lucide-react"
 import Link from "next/link"
@@ -117,7 +118,7 @@ const GridCard = React.forwardRef<HTMLDivElement, {
   )
 })
 
-export default function GridPage() {
+function GridPageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [selectedItem, setSelectedItem] = React.useState<string | null>(null)
@@ -368,6 +369,18 @@ export default function GridPage() {
         </button>
       </motion.div>
     </div>
+  )
+}
+
+export default function GridPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-800" />
+      </div>
+    }>
+      <GridPageContent />
+    </Suspense>
   )
 }
 
