@@ -13,17 +13,15 @@ function GridCard({
   index,
   isSelected,
   onToggle,
-  ref,
 }: {
   item: VehicleType
   index: number
   isSelected: boolean
   onToggle: () => void
-  ref?: React.Ref<HTMLDivElement>
 }) {
   return (
     <motion.div
-      ref={ref}
+      id={`grid-card-${item.title.replace(/[^a-zA-Z0-9]/g, '-')}`}
       layout
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -131,7 +129,6 @@ function GridPageContent() {
   const [selectedItem, setSelectedItem] = React.useState<string | null>(null)
   const [searchQuery, setSearchQuery] = React.useState("")
   const footerRef = React.useRef<HTMLDivElement>(null)
-  const cardRefs = React.useRef<(HTMLDivElement | null)[]>([])
 
   // Filter vehicles based on search query (always include "Other Items" as fallback)
   const filteredVehicles = React.useMemo(() => {
@@ -157,13 +154,14 @@ function GridPageContent() {
     const vehicleParam = searchParams.get('vehicle')
     if (vehicleParam) {
       // Check if the vehicle exists in our list
-      const vehicleIndex = vehicleTypes.findIndex(v => v.title === vehicleParam)
-      if (vehicleIndex !== -1) {
+      const vehicle = vehicleTypes.find(v => v.title === vehicleParam)
+      if (vehicle) {
         setSelectedItem(vehicleParam)
         
         // Scroll to the selected card after animations complete
         setTimeout(() => {
-          const cardEl = cardRefs.current[vehicleIndex]
+          const cardId = `grid-card-${vehicle.title.replace(/[^a-zA-Z0-9]/g, '-')}`
+          const cardEl = document.getElementById(cardId)
           if (cardEl) {
             cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
           }
@@ -252,7 +250,6 @@ function GridPageContent() {
             {filteredVehicles.map((item, index) => (
               <GridCard
                 key={item.title}
-                ref={(el) => { cardRefs.current[vehicleTypes.indexOf(item)] = el }}
                 item={item}
                 index={index}
                 isSelected={selectedItem === item.title}
