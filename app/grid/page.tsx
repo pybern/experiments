@@ -192,14 +192,27 @@ function GridPageContent() {
     }
   }
 
+  const handleContinue = () => {
+    if (!selectedItem) return
+    
+    // Route to appropriate questions flow based on vehicle type
+    if (selectedItem === "Cars, SUV's & 4WD's") {
+      router.push("/car/questions/location")
+    } else {
+      // For other vehicle types, show a placeholder or coming soon
+      // In the future, this would route to /motorcycle/questions, /caravan/questions, etc.
+      alert(`${selectedItem} quote flow coming soon!`)
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-neutral-50">
-      {/* Sticky Header */}
+    <>
+      {/* Sticky Page Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="sticky top-0 z-10 border-b border-neutral-200/80 bg-neutral-50/95 backdrop-blur-sm"
+        className="sticky top-[52px] z-10 border-b border-neutral-200/60 bg-neutral-50/95 backdrop-blur-sm"
       >
         <div className="mx-auto max-w-6xl px-6 py-4">
           <div className="flex items-center gap-3">
@@ -209,7 +222,7 @@ function GridPageContent() {
             >
               <ArrowLeftIcon className="h-4 w-4" />
             </Link>
-            <p className="text-sm font-medium text-neutral-400">Step 1 of 2</p>
+            <p className="text-sm font-medium text-neutral-400">Get Started</p>
           </div>
           <h1 className="mt-2 font-serif text-2xl text-neutral-900 md:text-3xl">
             What would you like to transport?
@@ -301,6 +314,7 @@ function GridPageContent() {
           
           <button
             disabled={!selectedItem}
+            onClick={handleContinue}
             className={`rounded-sm px-6 py-2.5 text-sm font-medium transition-all ${
               selectedItem
                 ? "bg-neutral-900 text-white hover:bg-neutral-800"
@@ -368,6 +382,7 @@ function GridPageContent() {
         {/* Right: Button */}
         <button
           disabled={!selectedItem}
+          onClick={handleContinue}
           className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all ${
             selectedItem
               ? "bg-white text-neutral-900 hover:bg-neutral-100"
@@ -377,7 +392,7 @@ function GridPageContent() {
           {selectedItem ? "Let's go!" : "Select"}
         </button>
       </motion.div>
-    </div>
+    </>
   )
 }
 

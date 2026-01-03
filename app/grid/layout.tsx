@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { QuoteHeader } from "@/components/quote-header"
 
 export const metadata: Metadata = {
   title: "Get a Quote - Select Your Vehicle Type",
@@ -14,6 +15,11 @@ export default function GridLayout({
 }: {
   children: React.ReactNode
 }) {
-  return children
+  return (
+    <div className="min-h-screen bg-neutral-50">
+      <QuoteHeader />
+      {children}
+    </div>
+  )
 }
 
