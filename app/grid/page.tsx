@@ -229,7 +229,7 @@ function GridPageContent() {
               placeholder="Search vehicles..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-10 w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-10 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-400"
+              className="h-10 w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-10 text-base text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-400 md:text-sm"
             />
             {searchQuery && (
               <button
