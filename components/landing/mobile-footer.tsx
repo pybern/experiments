@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { Menu, X } from "lucide-react"
 import { LiquidMetalButton } from "./liquid-metal-button"
 
@@ -78,7 +77,7 @@ export function MobileFooter() {
         <div className="fixed inset-0 z-50 flex flex-col bg-neutral-900 md:hidden">
           {/* Menu header - fixed at top */}
           <div className="flex h-16 shrink-0 items-center justify-between px-6">
-            <Image src="/logo.svg" alt="WeMoveX Logo" width={120} height={32} className="h-8 w-auto" />
+            <img src="/logo.svg" alt="WeMoveX Logo" className="h-8 w-auto" />
             <button
               onClick={() => setIsMenuOpen(false)}
               className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10"

@@ -22,6 +22,7 @@ export const viewport = {
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://wemovex.com.au"),
   title: {
     default: "WeMoveX - Australia's #1 Vehicle Transport Company",
     template: "%s | WeMoveX",
@@ -83,13 +84,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        {/* Preload logo */}
-        <link
-          rel="preload"
-          href="/logo.svg"
-          as="image"
-          type="image/svg+xml"
-        />
         <link
           rel="preconnect"
           href="https://fonts.googleapis.com"
