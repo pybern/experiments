@@ -135,6 +135,7 @@ function GridPageContent() {
   const router = useRouter()
   const [selectedItem, setSelectedItem] = React.useState<string | null>(null)
   const [searchQuery, setSearchQuery] = React.useState("")
+  const hasInitializedRef = React.useRef(false)
 
   // Filter vehicles based on search query (always include "Other Items" as fallback)
   const filteredVehicles = React.useMemo(() => {
@@ -155,7 +156,7 @@ function GridPageContent() {
     return filtered
   }, [searchQuery])
 
-  // Initialize from URL parameter and scroll to selected card (mobile only)
+  // Initialize from URL parameter and scroll to selected card (mobile only, initial load only)
   React.useEffect(() => {
     const vehicleParam = searchParams.get('vehicle')
     if (vehicleParam) {
@@ -164,8 +165,8 @@ function GridPageContent() {
       if (vehicle) {
         setSelectedItem(vehicleParam)
         
-        // Scroll to the selected card on mobile only (desktop shows all cards)
-        if (window.innerWidth < 768) {
+        // Scroll to the selected card on mobile only on initial navigation
+        if (!hasInitializedRef.current && window.innerWidth < 768) {
           setTimeout(() => {
             const cardId = `grid-card-${vehicle.title.replace(/[^a-zA-Z0-9]/g, '-')}`
             const cardEl = document.getElementById(cardId)
@@ -176,6 +177,7 @@ function GridPageContent() {
         }
       }
     }
+    hasInitializedRef.current = true
   }, [searchParams])
 
   const selectItem = (title: string) => {
