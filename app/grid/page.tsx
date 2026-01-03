@@ -23,7 +23,7 @@ function GridCard({
     <motion.div
       id={`grid-card-${item.title.replace(/[^a-zA-Z0-9]/g, '-')}`}
       layout
-      initial={{ opacity: 0, scale: 0.95 }}
+      initial={false}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
@@ -87,6 +87,13 @@ function GridCard({
 
       {/* Content */}
       <div className="flex flex-1 flex-col p-4">
+        {/* Badge */}
+        {item.badge && (
+          <span className="mb-1.5 w-fit rounded-full bg-[#d63c83]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#d63c83]">
+            {item.badge}
+          </span>
+        )}
+        
         {/* Title */}
         <h3 className="text-sm font-semibold text-neutral-900">
           {item.title}
@@ -128,7 +135,6 @@ function GridPageContent() {
   const router = useRouter()
   const [selectedItem, setSelectedItem] = React.useState<string | null>(null)
   const [searchQuery, setSearchQuery] = React.useState("")
-  const footerRef = React.useRef<HTMLDivElement>(null)
 
   // Filter vehicles based on search query (always include "Other Items" as fallback)
   const filteredVehicles = React.useMemo(() => {
@@ -149,7 +155,7 @@ function GridPageContent() {
     return filtered
   }, [searchQuery])
 
-  // Initialize from URL parameter and scroll to selected card
+  // Initialize from URL parameter and scroll to selected card (mobile only)
   React.useEffect(() => {
     const vehicleParam = searchParams.get('vehicle')
     if (vehicleParam) {
@@ -158,14 +164,16 @@ function GridPageContent() {
       if (vehicle) {
         setSelectedItem(vehicleParam)
         
-        // Scroll to the selected card after animations complete
-        setTimeout(() => {
-          const cardId = `grid-card-${vehicle.title.replace(/[^a-zA-Z0-9]/g, '-')}`
-          const cardEl = document.getElementById(cardId)
-          if (cardEl) {
-            cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
-          }
-        }, 400)
+        // Scroll to the selected card on mobile only (desktop shows all cards)
+        if (window.innerWidth < 768) {
+          setTimeout(() => {
+            const cardId = `grid-card-${vehicle.title.replace(/[^a-zA-Z0-9]/g, '-')}`
+            const cardEl = document.getElementById(cardId)
+            if (cardEl) {
+              cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            }
+          }, 400)
+        }
       }
     }
   }, [searchParams])
@@ -179,13 +187,6 @@ function GridPageContent() {
       router.replace(`/grid?vehicle=${encodeURIComponent(newSelection)}`, { scroll: false })
     } else {
       router.replace('/grid', { scroll: false })
-    }
-    
-    // Scroll to the continue button when selecting an item (desktop only)
-    if (newSelection && footerRef.current && window.innerWidth >= 768) {
-      setTimeout(() => {
-        footerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 150)
     }
   }
 
@@ -245,7 +246,7 @@ function GridPageContent() {
 
       <div className="mx-auto max-w-6xl px-6 py-6">
         {/* Grid */}
-        <div className="grid grid-cols-1 gap-5 pb-28 sm:grid-cols-2 md:grid-cols-3 md:pb-0 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-5 pb-28 sm:grid-cols-2 md:grid-cols-3 md:pb-32 lg:grid-cols-4">
           <AnimatePresence mode="popLayout">
             {filteredVehicles.map((item, index) => (
               <GridCard
@@ -276,14 +277,16 @@ function GridPageContent() {
           </motion.div>
         )}
 
-        {/* Footer - Desktop only (inline) */}
-        <motion.div
-          ref={footerRef}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.4 }}
-          className="mt-10 hidden items-center justify-between border-t border-neutral-200 pt-6 md:flex"
-        >
+      </div>
+
+      {/* Sticky Footer - Desktop only */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.3 }}
+        className="fixed inset-x-0 bottom-10 z-50 mx-6 hidden rounded-xl border border-neutral-200/80 bg-neutral-50/95 shadow-lg backdrop-blur-sm md:block"
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <p className="text-sm text-neutral-500">
             {selectedItem ? (
               <>
@@ -304,8 +307,8 @@ function GridPageContent() {
           >
             Continue
           </button>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
 
       {/* Sticky Footer - Mobile only (glassmorphism style) */}
       <motion.div
