@@ -54,7 +54,7 @@ export function MobileFooter() {
       {/* Floating Menu Button - bottom left */}
       <button
         onClick={() => setIsMenuOpen(true)}
-        className="fixed bottom-6 left-6 z-40 flex h-12 w-12 items-center justify-center bg-white text-neutral-900 shadow-lg transition-all hover:bg-neutral-100 md:hidden"
+        className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-6 z-40 flex h-12 w-12 items-center justify-center bg-white text-neutral-900 shadow-lg transition-all hover:bg-neutral-100 md:hidden"
         aria-label="Open menu"
       >
         <Menu className="h-5 w-5" />
@@ -62,7 +62,7 @@ export function MobileFooter() {
 
       {/* Floating CTA Button - bottom right (only after scrolling past hero) */}
       <div 
-        className={`fixed bottom-6 right-6 z-40 transition-all duration-300 md:hidden ${
+        className={`fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-6 z-40 transition-all duration-300 md:hidden ${
           showFloatingCTA 
             ? 'translate-y-0 opacity-100' 
             : 'translate-y-4 opacity-0 pointer-events-none'
@@ -75,9 +75,9 @@ export function MobileFooter() {
 
       {/* Full-screen mobile menu */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-neutral-900 md:hidden">
-          {/* Menu header */}
-          <div className="flex h-16 items-center justify-between px-6">
+        <div className="fixed inset-0 z-50 flex flex-col bg-neutral-900 md:hidden">
+          {/* Menu header - fixed at top */}
+          <div className="flex h-16 shrink-0 items-center justify-between px-6">
             <Image src="/logo.svg" alt="WeMoveX Logo" width={120} height={32} className="h-8 w-auto" />
             <button
               onClick={() => setIsMenuOpen(false)}
@@ -88,8 +88,8 @@ export function MobileFooter() {
             </button>
           </div>
 
-          {/* Menu content */}
-          <div className="px-6 pt-8">
+          {/* Menu content - scrollable */}
+          <div className="flex-1 overflow-y-auto px-6 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
             <div className="mb-8 border-t border-neutral-700" />
             
             <p className="mb-6 text-xs font-medium uppercase tracking-widest text-neutral-500">

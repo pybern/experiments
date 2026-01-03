@@ -34,8 +34,8 @@ export default function LandingPage() {
       {/* Structured Data for SEO */}
       <StructuredData />
       
-      {/* Announcement Banner */}
-      <AnnouncementBanner />
+      {/* Announcement Banner - hidden for now */}
+      {/* <AnnouncementBanner /> */}
 
       {/* Background Image - Optimized with Next.js Image */}
       <div className="fixed inset-0">

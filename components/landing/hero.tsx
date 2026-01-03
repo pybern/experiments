@@ -3,7 +3,7 @@ import { LiquidMetalButton } from "./liquid-metal-button"
 
 export function Hero() {
   return (
-    <div className="relative z-10 flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-6 pb-20 md:pb-0">
+    <div className="relative z-10 flex min-h-[calc(100vh-56px)] flex-col items-center justify-center px-6 pb-20 md:min-h-[calc(100vh-80px)] md:pb-0">
       <div className="max-w-4xl text-center animate-fade-in-up">
         {/* Badge */}
         <div className="mb-8 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur-md animate-fade-in-scale">
