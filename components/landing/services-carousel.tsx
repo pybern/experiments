@@ -139,6 +139,7 @@ export function ServicesCarousel() {
         ref={containerRef}
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto py-4 scrollbar-hide md:snap-none"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        onTouchStart={() => setIsAutoCycling(false)}
       >
         {/* Left spacer - centers card on mobile, aligns with content on desktop (accounting for gap-4) */}
         <div className="shrink-0 w-[calc(50vw-170px-8px)] md:w-[max(0.5rem,calc((100vw-80rem)/2+0.5rem))]" />
@@ -197,6 +198,15 @@ export function ServicesCarousel() {
                   <div className="border-t border-rose-100 pt-4">
                     <p className="text-xs text-neutral-400">{item.details}</p>
                   </div>
+                  
+                  {/* Move it button */}
+                  <Link
+                    href={`/grid?vehicle=${encodeURIComponent(item.title)}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="mt-4 block w-full rounded-full bg-[#d63c83] py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-[#c23575]"
+                  >
+                    Move it
+                  </Link>
                 </div>
               </div>
               </div>
