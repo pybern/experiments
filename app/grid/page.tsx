@@ -8,12 +8,19 @@ import Link from "next/link"
 import { useSearchParams, useRouter } from "next/navigation"
 import { vehicleTypes, type VehicleType } from "@/data/vehicle-types"
 
-const GridCard = React.forwardRef<HTMLDivElement, {
+function GridCard({
+  item,
+  index,
+  isSelected,
+  onToggle,
+  ref,
+}: {
   item: VehicleType
   index: number
   isSelected: boolean
   onToggle: () => void
-}>(function GridCard({ item, index, isSelected, onToggle }, ref) {
+  ref?: React.Ref<HTMLDivElement>
+}) {
   return (
     <motion.div
       ref={ref}
@@ -116,7 +123,7 @@ const GridCard = React.forwardRef<HTMLDivElement, {
       />
     </motion.div>
   )
-})
+}
 
 function GridPageContent() {
   const searchParams = useSearchParams()
