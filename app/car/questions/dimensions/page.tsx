@@ -52,10 +52,10 @@ function DimensionsStepContent() {
 
   // Validate that if toggle is on, value must be provided
   const isValid = 
-    (!lengthToggle || lengthValue.trim()) &&
-    (!heightToggle || heightValue.trim()) &&
-    (!clearanceToggle || clearanceValue.trim()) &&
-    (!valueToggle || valueValue.trim())
+    (!lengthToggle || lengthValue.trim() !== "") &&
+    (!heightToggle || heightValue.trim() !== "") &&
+    (!clearanceToggle || clearanceValue.trim() !== "") &&
+    (!valueToggle || valueValue.trim() !== "")
 
   const handleContinue = () => {
     // If any dimension is non-standard, go to custom quote
