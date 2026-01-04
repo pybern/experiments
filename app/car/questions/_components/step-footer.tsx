@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { motion, AnimatePresence } from "motion/react"
+import { useNavigation } from "./navigation-context"
 
 interface StepFooterProps {
   isValid: boolean
@@ -22,13 +23,18 @@ export function StepFooter({
   mobileValue,
   isLoading = false,
 }: StepFooterProps) {
+  const { direction, isFirstRender } = useNavigation()
+  
+  // Skip entrance animations on back navigation
+  const shouldAnimate = direction !== "back" || isFirstRender
+  
   return (
     <>
       {/* Desktop Footer - Inline with content */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={shouldAnimate ? { opacity: 0, y: 20 } : false}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.3 }}
+        transition={{ delay: shouldAnimate ? 0.3 : 0, duration: shouldAnimate ? 0.3 : 0 }}
         className="mx-auto mt-4 hidden max-w-2xl px-6 md:block"
       >
         <div className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white px-5 py-3.5 shadow-sm">
@@ -59,9 +65,9 @@ export function StepFooter({
 
       {/* Mobile Footer - Glassmorphism style */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={shouldAnimate ? { opacity: 0, y: 20 } : false}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.3 }}
+        transition={{ delay: shouldAnimate ? 0.3 : 0, duration: shouldAnimate ? 0.3 : 0 }}
         className="fixed inset-x-4 bottom-4 z-50 flex h-14 items-center rounded-full border border-white/10 bg-neutral-900/70 px-2 shadow-xl shadow-black/20 backdrop-blur-xl md:hidden"
       >
         <AnimatePresence mode="wait">

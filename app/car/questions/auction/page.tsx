@@ -1,19 +1,23 @@
 "use client"
 
 import * as React from "react"
-import { Suspense } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { StepHeader } from "../_components/step-header"
 import { StepFooter } from "../_components/step-footer"
 import { RadioGroup } from "../_components/radio-group"
+import { useNavigation } from "../_components/navigation-context"
 import { carSteps, totalSteps, checkExitCondition } from "@/data/car-questions-flow"
 
 const stepConfig = carSteps[2] // auction step
 
-function AuctionStepContent() {
+export default function AuctionStep() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { direction, setForwardNavigation, isFirstRender } = useNavigation()
+  
+  // Skip animations on back navigation
+  const shouldAnimate = direction !== "back" || isFirstRender
 
   // Get all previous params
   const pick = searchParams.get("pick") || ""
@@ -57,6 +61,8 @@ function AuctionStepContent() {
     } else {
       params.delete("salvage")
     }
+    // Mark as forward navigation for animation optimization
+    setForwardNavigation()
     router.push(`${stepConfig.nextRoute}?${params.toString()}`)
   }
 
@@ -89,13 +95,14 @@ function AuctionStepContent() {
         description={stepConfig.description}
         backHref={buildBackHref()}
         progress={stepConfig.progress}
+        previousProgress={carSteps[1].progress}
       />
 
       <div className="mx-auto max-w-2xl px-6 py-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={shouldAnimate ? { opacity: 0, y: 20 } : false}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          transition={{ duration: shouldAnimate ? 0.35 : 0, delay: shouldAnimate ? 0.1 : 0 }}
           className="space-y-8 pb-24 md:pb-0"
         >
           {/* Auction Question */}
@@ -171,18 +178,6 @@ function AuctionStepContent() {
         continueLabel={salvage === "salvage" ? "Get Custom Quote" : "Continue"}
       />
     </>
-  )
-}
-
-export default function AuctionStep() {
-  return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-800" />
-      </div>
-    }>
-      <AuctionStepContent />
-    </Suspense>
   )
 }
 

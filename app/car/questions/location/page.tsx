@@ -1,18 +1,22 @@
 "use client"
 
 import * as React from "react"
-import { Suspense } from "react"
 import { motion } from "motion/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { StepHeader } from "../_components/step-header"
 import { StepFooter } from "../_components/step-footer"
+import { useNavigation } from "../_components/navigation-context"
 import { carSteps, totalSteps, mockLocations } from "@/data/car-questions-flow"
 
 const stepConfig = carSteps[0] // location step
 
-function LocationStepContent() {
+export default function LocationStep() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { direction, setForwardNavigation, isFirstRender } = useNavigation()
+  
+  // Skip animations on back navigation
+  const shouldAnimate = direction !== "back" || isFirstRender
   
   const [pickup, setPickup] = React.useState(searchParams.get("pick") || "")
   const [pickupRef, setPickupRef] = React.useState(searchParams.get("pickRef") || "")
@@ -70,6 +74,8 @@ function LocationStepContent() {
     params.set("pickRef", pickupRef)
     params.set("drop", dropoff)
     params.set("dropRef", dropoffRef)
+    // Mark as forward navigation for animation optimization
+    setForwardNavigation()
     router.push(`${stepConfig.nextRoute}?${params.toString()}`)
   }
 
@@ -103,9 +109,9 @@ function LocationStepContent() {
 
       <div className="mx-auto max-w-2xl px-6 py-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={shouldAnimate ? { opacity: 0, y: 20 } : false}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          transition={{ duration: shouldAnimate ? 0.35 : 0, delay: shouldAnimate ? 0.1 : 0 }}
           className="space-y-6 pb-24 md:pb-0"
         >
           {/* Pickup Location */}
@@ -197,16 +203,3 @@ function LocationStepContent() {
     </>
   )
 }
-
-export default function LocationStep() {
-  return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-800" />
-      </div>
-    }>
-      <LocationStepContent />
-    </Suspense>
-  )
-}
-

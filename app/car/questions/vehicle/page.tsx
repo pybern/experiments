@@ -1,13 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { Suspense } from "react"
 import { motion } from "motion/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ChevronDownIcon } from "lucide-react"
 import { StepHeader } from "../_components/step-header"
 import { StepFooter } from "../_components/step-footer"
 import { RadioGroup } from "../_components/radio-group"
+import { useNavigation } from "../_components/navigation-context"
 import {
   carSteps,
   totalSteps,
@@ -18,9 +18,13 @@ import {
 
 const stepConfig = carSteps[1] // vehicle step
 
-function VehicleStepContent() {
+export default function VehicleStep() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { direction, setForwardNavigation, isFirstRender } = useNavigation()
+  
+  // Skip animations on back navigation
+  const shouldAnimate = direction !== "back" || isFirstRender
 
   // Get previous step params
   const pick = searchParams.get("pick") || ""
@@ -73,6 +77,8 @@ function VehicleStepContent() {
     params.set("model", model)
     params.set("age", age!)
     params.set("drive", drive!)
+    // Mark as forward navigation for animation optimization
+    setForwardNavigation()
     router.push(`${stepConfig.nextRoute}?${params.toString()}`)
   }
 
@@ -100,13 +106,14 @@ function VehicleStepContent() {
         description={stepConfig.description}
         backHref={`/car/questions/location?${searchParams.toString()}`}
         progress={stepConfig.progress}
+        previousProgress={carSteps[0].progress}
       />
 
       <div className="mx-auto max-w-2xl px-6 py-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={shouldAnimate ? { opacity: 0, y: 20 } : false}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          transition={{ duration: shouldAnimate ? 0.35 : 0, delay: shouldAnimate ? 0.1 : 0 }}
           className="space-y-8 pb-24 md:pb-0"
         >
           {/* Vehicle Make & Model */}
@@ -210,18 +217,6 @@ function VehicleStepContent() {
         continueLabel={age === "over30" || drive === "issues" ? "Get Custom Quote" : "Continue"}
       />
     </>
-  )
-}
-
-export default function VehicleStep() {
-  return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-800" />
-      </div>
-    }>
-      <VehicleStepContent />
-    </Suspense>
   )
 }
 

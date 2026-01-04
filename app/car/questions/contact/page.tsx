@@ -1,12 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { Suspense } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { CheckCircleIcon } from "lucide-react"
 import { StepHeader } from "../_components/step-header"
 import { StepFooter } from "../_components/step-footer"
+import { useNavigation } from "../_components/navigation-context"
 import { carSteps, totalSteps, vehicleMakes, vehicleModels } from "@/data/car-questions-flow"
 
 const stepConfig = carSteps[4] // contact step
@@ -18,9 +18,13 @@ const submitSteps = [
   "Almost there...",
 ]
 
-function ContactStepContent() {
+export default function ContactStep() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { direction, isFirstRender } = useNavigation()
+  
+  // Skip animations on back navigation
+  const shouldAnimate = direction !== "back" || isFirstRender
 
   // Get all previous params
   const pick = searchParams.get("pick") || ""
@@ -218,13 +222,14 @@ function ContactStepContent() {
         description={stepConfig.description}
         backHref={buildBackHref()}
         progress={stepConfig.progress}
+        previousProgress={carSteps[3].progress}
       />
 
       <div className="mx-auto max-w-2xl px-6 py-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={shouldAnimate ? { opacity: 0, y: 20 } : false}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          transition={{ duration: shouldAnimate ? 0.35 : 0, delay: shouldAnimate ? 0.1 : 0 }}
           className="space-y-6 pb-24 md:pb-0"
         >
           {/* Quote Summary Card */}
@@ -331,18 +336,6 @@ function ContactStepContent() {
         isLoading={isSubmitting}
       />
     </>
-  )
-}
-
-export default function ContactStep() {
-  return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-800" />
-      </div>
-    }>
-      <ContactStepContent />
-    </Suspense>
   )
 }
 

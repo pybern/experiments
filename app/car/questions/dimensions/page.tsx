@@ -1,19 +1,23 @@
 "use client"
 
 import * as React from "react"
-import { Suspense } from "react"
 import { motion } from "motion/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { StepHeader } from "../_components/step-header"
 import { StepFooter } from "../_components/step-footer"
 import { ToggleInput } from "../_components/toggle-input"
+import { useNavigation } from "../_components/navigation-context"
 import { carSteps, totalSteps } from "@/data/car-questions-flow"
 
 const stepConfig = carSteps[3] // dimensions step
 
-function DimensionsStepContent() {
+export default function DimensionsStep() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { direction, setForwardNavigation, isFirstRender } = useNavigation()
+  
+  // Skip animations on back navigation
+  const shouldAnimate = direction !== "back" || isFirstRender
 
   // Get all previous params
   const pick = searchParams.get("pick") || ""
@@ -77,6 +81,8 @@ function DimensionsStepContent() {
     if (valueValue) params.set("carValue", valueValue)
     else params.delete("carValue")
     
+    // Mark as forward navigation for animation optimization
+    setForwardNavigation()
     router.push(`${stepConfig.nextRoute}?${params.toString()}`)
   }
 
@@ -110,13 +116,14 @@ function DimensionsStepContent() {
         description={stepConfig.description}
         backHref={buildBackHref()}
         progress={stepConfig.progress}
+        previousProgress={carSteps[2].progress}
       />
 
       <div className="mx-auto max-w-2xl px-6 py-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={shouldAnimate ? { opacity: 0, y: 20 } : false}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          transition={{ duration: shouldAnimate ? 0.35 : 0, delay: shouldAnimate ? 0.1 : 0 }}
           className="space-y-4 pb-24 md:pb-0"
         >
           {/* Length Question */}
@@ -178,18 +185,6 @@ function DimensionsStepContent() {
         continueLabel={hasCustomDimensions ? "Get Custom Quote" : "Continue"}
       />
     </>
-  )
-}
-
-export default function DimensionsStep() {
-  return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-800" />
-      </div>
-    }>
-      <DimensionsStepContent />
-    </Suspense>
   )
 }
 
