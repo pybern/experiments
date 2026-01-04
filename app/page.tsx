@@ -6,6 +6,7 @@ import { Hero } from "@/components/landing/hero"
 import { Footer } from "@/components/landing/footer"
 import { MobileFooter } from "@/components/landing/mobile-footer"
 import { StructuredData } from "@/components/landing/structured-data"
+import { CTASection } from "@/components/landing/cta-section"
 
 // Lazy load below-the-fold components for better initial page load
 const ServicesCarousel = dynamic(
@@ -59,6 +60,7 @@ export default function LandingPage() {
       <Features />
       <Testimonials />
       <AustraliaMap />
+      <CTASection />
       <Footer />
       
       {/* Mobile Floating Footer with CTA and Menu */}

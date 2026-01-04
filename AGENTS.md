@@ -185,6 +185,17 @@ router.push(`/car/questions/vehicle?pick=${pickup}&drop=${dropoff}`)
 
 Edit CSS variables in `app/globals.css` under `:root` (light) and `.dark` (dark).
 
+## Development Approach
+
+### Mobile First
+
+**Always design and test mobile before desktop.** The majority of users access on mobile devices.
+
+- Start with mobile layouts, then add `md:` and `lg:` breakpoints
+- Test in browser DevTools at 375px width first
+- Check touch targets are at least 44x44px
+- Verify scrolling and gestures work smoothly
+
 ## Gotchas
 
 - **Tailwind v4**: Uses new CSS-based config, not `tailwind.config.js`
