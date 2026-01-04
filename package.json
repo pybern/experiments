@@ -16,6 +16,7 @@
     "leaflet": "^1.9.4",
     "lucide-react": "^0.562.0",
     "motion": "^12.23.26",
+    "motion-plus": "https://api.motion.dev/registry?package=motion-plus&version=2.0.0-alpha.4&token=f4289638640691816363dc4cf8518f5f6d0e44e9c3518f0dde800306c40143b2",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
