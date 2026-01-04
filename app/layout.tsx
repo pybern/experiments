@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ServiceWorkerRegister } from "@/components/service-worker-register";
+import { InstallPrompt } from "@/components/install-prompt";
 import "./globals.css";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
@@ -19,6 +21,7 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
+  themeColor: '#d63c83',
 }
 
 export const metadata: Metadata = {
@@ -70,9 +73,18 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   icons: {
-    icon: "/logo.svg",
+    icon: [
+      { url: "/logo.svg", type: "image/svg+xml" },
+      { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
     shortcut: "/logo.svg",
-    apple: "/logo.svg",
+    apple: "/icon-192x192.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "WeMoveX",
   },
 };
 
@@ -100,6 +112,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <ServiceWorkerRegister />
+        <InstallPrompt />
         <SpeedInsights />
       </body>
     </html>
