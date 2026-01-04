@@ -1,7 +1,4 @@
-"use client"
-
 import * as React from "react"
-import { motion } from "motion/react"
 import { ArrowLeftIcon } from "lucide-react"
 import Link from "next/link"
 
@@ -23,12 +20,7 @@ export function StepHeader({
   progress,
 }: StepHeaderProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="sticky top-[52px] z-10 border-b border-neutral-200/60 bg-neutral-50/95 backdrop-blur-sm"
-    >
+    <div className="sticky top-[52px] z-10 border-b border-neutral-200/60 bg-neutral-50/95 backdrop-blur-sm">
       <div className="mx-auto max-w-2xl px-6 py-4">
         <div className="flex items-center gap-3">
           <Link
@@ -50,15 +42,12 @@ export function StepHeader({
 
         {/* Progress Bar */}
         <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-neutral-200">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="h-full bg-neutral-800"
+          <div
+            className="h-full bg-neutral-800 transition-all duration-300 ease-out"
+            style={{ width: `${progress}%` }}
           />
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
-

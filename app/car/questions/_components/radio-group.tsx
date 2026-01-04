@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { motion, AnimatePresence } from "motion/react"
 import { CheckIcon } from "lucide-react"
 
 export interface RadioOption {
@@ -36,14 +35,11 @@ export function RadioGroup({
         {options.map((option) => {
           const isSelected = value === option.value
           return (
-            <motion.button
+            <button
               key={option.id}
               type="button"
               onClick={() => onChange(option.value)}
-              initial={false}
-              animate={{ scale: 1 }}
-              whileTap={{ scale: 0.98 }}
-              className={`group relative flex cursor-pointer items-start gap-3 rounded-lg border p-4 text-left transition-all duration-200 ${
+              className={`group relative flex cursor-pointer items-start gap-3 rounded-lg border p-4 text-left transition-all duration-150 active:scale-[0.98] ${
                 isSelected
                   ? "border-neutral-400 bg-white shadow-md ring-2 ring-neutral-800 ring-offset-2"
                   : "border-neutral-200 bg-white hover:border-neutral-300 hover:shadow-sm"
@@ -51,25 +47,18 @@ export function RadioGroup({
             >
               {/* Radio indicator */}
               <div
-                className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-150 ${
                   isSelected
                     ? "border-neutral-800 bg-neutral-800"
                     : "border-neutral-300 bg-white group-hover:border-neutral-400"
                 }`}
               >
-                <AnimatePresence mode="wait" initial={false}>
-                  {isSelected && (
-                    <motion.div
-                      key="check"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                      transition={{ duration: 0.15 }}
-                    >
-                      <CheckIcon className="h-3 w-3 text-white" strokeWidth={3} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <CheckIcon 
+                  className={`h-3 w-3 text-white transition-transform duration-150 ${
+                    isSelected ? "scale-100" : "scale-0"
+                  }`} 
+                  strokeWidth={3} 
+                />
               </div>
 
               {/* Content */}
@@ -100,11 +89,10 @@ export function RadioGroup({
                 onChange={() => onChange(option.value)}
                 className="sr-only"
               />
-            </motion.button>
+            </button>
           )
         })}
       </div>
     </div>
   )
 }
-

@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { motion, AnimatePresence } from "motion/react"
 
 interface ToggleInputProps {
   label: string
@@ -48,45 +47,39 @@ export function ToggleInput({
             isToggled ? "bg-neutral-800" : "bg-neutral-200"
           }`}
         >
-          <motion.span
-            initial={false}
-            animate={{ x: isToggled ? 22 : 2 }}
-            transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className="inline-block h-5 w-5 rounded-full bg-white shadow-md"
+          <span
+            className={`inline-block h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-200 ${
+              isToggled ? "translate-x-[22px]" : "translate-x-[2px]"
+            }`}
           />
         </button>
       </div>
 
-      {/* Conditional Input */}
-      <AnimatePresence initial={false}>
-        {isToggled && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="mt-4 pt-4 border-t border-neutral-100">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => onInputChange(e.target.value)}
-                  placeholder={inputPlaceholder}
-                  className="h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-400"
-                />
-                {inputUnit && (
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">
-                    {inputUnit}
-                  </span>
-                )}
-              </div>
+      {/* Conditional Input - CSS Grid for smooth height transition */}
+      <div
+        className={`grid transition-[grid-template-rows] duration-200 ${
+          isToggled ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="mt-4 pt-4 border-t border-neutral-100">
+            <div className="relative">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => onInputChange(e.target.value)}
+                placeholder={inputPlaceholder}
+                className="h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-400"
+              />
+              {inputUnit && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">
+                  {inputUnit}
+                </span>
+              )}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
-

@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { motion, AnimatePresence } from "motion/react"
 
 interface StepFooterProps {
   isValid: boolean
@@ -11,6 +10,7 @@ interface StepFooterProps {
   mobileLabel?: string
   mobileValue?: string
   isLoading?: boolean
+  backHref?: string
 }
 
 export function StepFooter({
@@ -25,12 +25,7 @@ export function StepFooter({
   return (
     <>
       {/* Desktop Footer - Inline with content */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.3 }}
-        className="mx-auto mt-4 hidden max-w-2xl px-6 md:block"
-      >
+      <div className="mx-auto mt-4 hidden max-w-2xl px-6 md:block">
         <div className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white px-5 py-3.5 shadow-sm">
           <p className="text-sm text-neutral-500">
             {summary || (isValid ? "Ready to continue" : "Complete the fields above")}
@@ -55,63 +50,32 @@ export function StepFooter({
             )}
           </button>
         </div>
-      </motion.div>
+      </div>
 
       {/* Mobile Footer - Glassmorphism style */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.3 }}
-        className="fixed inset-x-4 bottom-4 z-50 flex h-14 items-center rounded-full border border-white/10 bg-neutral-900/70 px-2 shadow-xl shadow-black/20 backdrop-blur-xl md:hidden"
-      >
-        <AnimatePresence mode="wait">
-          {mobileValue ? (
-            <motion.div
-              key="selected"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-1 items-center min-w-0"
-            >
-              {/* Checkmark indicator */}
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
-                className="ml-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-500/20"
-              >
-                <svg className="h-3.5 w-3.5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </motion.div>
-              
-              <motion.div 
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.2, delay: 0.15 }}
-                className="min-w-0 flex-1 px-2"
-              >
-                <span className="block truncate text-xs font-medium text-white">
-                  {mobileValue}
-                </span>
-              </motion.div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex-1 pl-4"
-            >
-              <span className="text-xs text-white/50">
-                {summary || "Complete the form"}
+      <div className="fixed inset-x-4 bottom-4 z-50 flex h-14 items-center rounded-full border border-white/10 bg-neutral-900/70 px-2 shadow-xl shadow-black/20 backdrop-blur-xl md:hidden">
+        {mobileValue ? (
+          <div className="flex flex-1 items-center min-w-0">
+            {/* Checkmark indicator */}
+            <div className="ml-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-500/20">
+              <svg className="h-3.5 w-3.5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            
+            <div className="min-w-0 flex-1 px-2">
+              <span className="block truncate text-xs font-medium text-white">
+                {mobileValue}
               </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 pl-4">
+            <span className="text-xs text-white/50">
+              {summary || "Complete the form"}
+            </span>
+          </div>
+        )}
         
         <button
           disabled={!isValid || isLoading}
@@ -132,8 +96,7 @@ export function StepFooter({
             "Fill form"
           )}
         </button>
-      </motion.div>
+      </div>
     </>
   )
 }
-
