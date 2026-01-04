@@ -7,22 +7,7 @@ import { StepFooter } from "../_components/step-footer"
 import { vehicleMakes, vehicleModels } from "@/data/car-questions-flow"
 
 interface ContactFormProps {
-  initialParams: {
-    pick?: string
-    pickRef?: string
-    drop?: string
-    dropRef?: string
-    make?: string
-    model?: string
-    age?: string
-    drive?: string
-    auction?: string
-    salvage?: string
-    carLength?: string
-    carHeight?: string
-    carClearance?: string
-    carValue?: string
-  }
+  initialParams: Record<string, string | undefined>
 }
 
 const submitSteps = [
@@ -128,20 +113,9 @@ export function ContactForm({ initialParams }: ContactFormProps) {
 
   const buildBackHref = () => {
     const params = new URLSearchParams()
-    if (initialParams.pick) params.set("pick", initialParams.pick)
-    if (initialParams.pickRef) params.set("pickRef", initialParams.pickRef)
-    if (initialParams.drop) params.set("drop", initialParams.drop)
-    if (initialParams.dropRef) params.set("dropRef", initialParams.dropRef)
-    if (initialParams.make) params.set("make", initialParams.make)
-    if (initialParams.model) params.set("model", initialParams.model)
-    if (initialParams.age) params.set("age", initialParams.age)
-    if (initialParams.drive) params.set("drive", initialParams.drive)
-    if (initialParams.auction) params.set("auction", initialParams.auction)
-    if (initialParams.salvage) params.set("salvage", initialParams.salvage)
-    if (initialParams.carLength) params.set("carLength", initialParams.carLength)
-    if (initialParams.carHeight) params.set("carHeight", initialParams.carHeight)
-    if (initialParams.carClearance) params.set("carClearance", initialParams.carClearance)
-    if (initialParams.carValue) params.set("carValue", initialParams.carValue)
+    Object.entries(initialParams).forEach(([key, value]) => {
+      if (value) params.set(key, value)
+    })
     return `/car/questions/dimensions?${params.toString()}`
   }
 

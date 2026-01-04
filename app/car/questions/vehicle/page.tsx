@@ -2,16 +2,7 @@ import { redirect } from "next/navigation"
 import { VehicleForm } from "./vehicle-form"
 
 interface Props {
-  searchParams: Promise<{
-    pick?: string
-    pickRef?: string
-    drop?: string
-    dropRef?: string
-    make?: string
-    model?: string
-    age?: string
-    drive?: string
-  }>
+  searchParams: Promise<Record<string, string | undefined>>
 }
 
 export default async function VehicleStep({ searchParams }: Props) {

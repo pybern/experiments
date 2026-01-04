@@ -7,18 +7,7 @@ import { RadioGroup } from "../_components/radio-group"
 import { checkExitCondition } from "@/data/car-questions-flow"
 
 interface AuctionFormProps {
-  initialParams: {
-    pick?: string
-    pickRef?: string
-    drop?: string
-    dropRef?: string
-    make?: string
-    model?: string
-    age?: string
-    drive?: string
-    auction?: string
-    salvage?: string
-  }
+  initialParams: Record<string, string | undefined>
 }
 
 export function AuctionForm({ initialParams }: AuctionFormProps) {
@@ -41,33 +30,26 @@ export function AuctionForm({ initialParams }: AuctionFormProps) {
       }
     }
 
-    // Build params
+    // Build params - preserve all existing and add/update current step's values
     const params = new URLSearchParams()
-    params.set("pick", initialParams.pick || "")
-    params.set("pickRef", initialParams.pickRef || "")
-    params.set("drop", initialParams.drop || "")
-    params.set("dropRef", initialParams.dropRef || "")
-    params.set("make", initialParams.make || "")
-    params.set("model", initialParams.model || "")
-    params.set("age", initialParams.age || "")
-    params.set("drive", initialParams.drive || "")
+    Object.entries(initialParams).forEach(([key, value]) => {
+      if (value) params.set(key, value)
+    })
+    // Set/update this step's values
     params.set("auction", auction!)
     if (salvage) {
       params.set("salvage", salvage)
+    } else {
+      params.delete("salvage") // Remove if not set
     }
     router.push(`/car/questions/dimensions?${params.toString()}`)
   }
 
   const buildBackHref = () => {
     const params = new URLSearchParams()
-    if (initialParams.pick) params.set("pick", initialParams.pick)
-    if (initialParams.pickRef) params.set("pickRef", initialParams.pickRef)
-    if (initialParams.drop) params.set("drop", initialParams.drop)
-    if (initialParams.dropRef) params.set("dropRef", initialParams.dropRef)
-    if (initialParams.make) params.set("make", initialParams.make)
-    if (initialParams.model) params.set("model", initialParams.model)
-    if (initialParams.age) params.set("age", initialParams.age)
-    if (initialParams.drive) params.set("drive", initialParams.drive)
+    Object.entries(initialParams).forEach(([key, value]) => {
+      if (value) params.set(key, value)
+    })
     return `/car/questions/vehicle?${params.toString()}`
   }
 

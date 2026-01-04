@@ -6,22 +6,7 @@ import { StepFooter } from "../_components/step-footer"
 import { ToggleInput } from "../_components/toggle-input"
 
 interface DimensionsFormProps {
-  initialParams: {
-    pick?: string
-    pickRef?: string
-    drop?: string
-    dropRef?: string
-    make?: string
-    model?: string
-    age?: string
-    drive?: string
-    auction?: string
-    salvage?: string
-    carLength?: string
-    carHeight?: string
-    carClearance?: string
-    carValue?: string
-  }
+  initialParams: Record<string, string | undefined>
 }
 
 export function DimensionsForm({ initialParams }: DimensionsFormProps) {
@@ -57,20 +42,13 @@ export function DimensionsForm({ initialParams }: DimensionsFormProps) {
       return
     }
 
-    // Build params
+    // Build params - preserve all existing and add/update current step's values
     const params = new URLSearchParams()
-    params.set("pick", initialParams.pick || "")
-    params.set("pickRef", initialParams.pickRef || "")
-    params.set("drop", initialParams.drop || "")
-    params.set("dropRef", initialParams.dropRef || "")
-    params.set("make", initialParams.make || "")
-    params.set("model", initialParams.model || "")
-    params.set("age", initialParams.age || "")
-    params.set("drive", initialParams.drive || "")
-    params.set("auction", initialParams.auction || "")
-    if (initialParams.salvage) params.set("salvage", initialParams.salvage)
+    Object.entries(initialParams).forEach(([key, value]) => {
+      if (value) params.set(key, value)
+    })
     
-    // Add dimension values if provided
+    // Set/update this step's values (dimension values if provided)
     if (lengthValue) params.set("carLength", lengthValue)
     if (heightValue) params.set("carHeight", heightValue)
     if (clearanceValue) params.set("carClearance", clearanceValue)
@@ -81,16 +59,9 @@ export function DimensionsForm({ initialParams }: DimensionsFormProps) {
 
   const buildBackHref = () => {
     const params = new URLSearchParams()
-    if (initialParams.pick) params.set("pick", initialParams.pick)
-    if (initialParams.pickRef) params.set("pickRef", initialParams.pickRef)
-    if (initialParams.drop) params.set("drop", initialParams.drop)
-    if (initialParams.dropRef) params.set("dropRef", initialParams.dropRef)
-    if (initialParams.make) params.set("make", initialParams.make)
-    if (initialParams.model) params.set("model", initialParams.model)
-    if (initialParams.age) params.set("age", initialParams.age)
-    if (initialParams.drive) params.set("drive", initialParams.drive)
-    if (initialParams.auction) params.set("auction", initialParams.auction)
-    if (initialParams.salvage) params.set("salvage", initialParams.salvage)
+    Object.entries(initialParams).forEach(([key, value]) => {
+      if (value) params.set(key, value)
+    })
     return `/car/questions/auction?${params.toString()}`
   }
 

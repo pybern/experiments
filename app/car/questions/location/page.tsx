@@ -1,12 +1,7 @@
 import { LocationForm } from "./location-form"
 
 interface Props {
-  searchParams: Promise<{
-    pick?: string
-    pickRef?: string
-    drop?: string
-    dropRef?: string
-  }>
+  searchParams: Promise<Record<string, string | undefined>>
 }
 
 export default async function LocationStep({ searchParams }: Props) {

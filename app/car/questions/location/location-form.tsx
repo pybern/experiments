@@ -6,12 +6,7 @@ import { StepFooter } from "../_components/step-footer"
 import { mockLocations } from "@/data/car-questions-flow"
 
 interface LocationFormProps {
-  initialParams: {
-    pick?: string
-    pickRef?: string
-    drop?: string
-    dropRef?: string
-  }
+  initialParams: Record<string, string | undefined>
 }
 
 export function LocationForm({ initialParams }: LocationFormProps) {
@@ -67,7 +62,12 @@ export function LocationForm({ initialParams }: LocationFormProps) {
   }
 
   const handleContinue = () => {
+    // Preserve all existing params and add/update current step's values
     const params = new URLSearchParams()
+    Object.entries(initialParams).forEach(([key, value]) => {
+      if (value) params.set(key, value)
+    })
+    // Set/update this step's values
     params.set("pick", pickup)
     params.set("pickRef", pickupRef)
     params.set("drop", dropoff)

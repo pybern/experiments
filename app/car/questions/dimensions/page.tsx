@@ -2,22 +2,7 @@ import { redirect } from "next/navigation"
 import { DimensionsForm } from "./dimensions-form"
 
 interface Props {
-  searchParams: Promise<{
-    pick?: string
-    pickRef?: string
-    drop?: string
-    dropRef?: string
-    make?: string
-    model?: string
-    age?: string
-    drive?: string
-    auction?: string
-    salvage?: string
-    carLength?: string
-    carHeight?: string
-    carClearance?: string
-    carValue?: string
-  }>
+  searchParams: Promise<Record<string, string | undefined>>
 }
 
 export default async function DimensionsStep({ searchParams }: Props) {

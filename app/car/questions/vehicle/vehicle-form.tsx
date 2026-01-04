@@ -12,16 +12,7 @@ import {
 } from "@/data/car-questions-flow"
 
 interface VehicleFormProps {
-  initialParams: {
-    pick?: string
-    pickRef?: string
-    drop?: string
-    dropRef?: string
-    make?: string
-    model?: string
-    age?: string
-    drive?: string
-  }
+  initialParams: Record<string, string | undefined>
 }
 
 export function VehicleForm({ initialParams }: VehicleFormProps) {
@@ -59,12 +50,13 @@ export function VehicleForm({ initialParams }: VehicleFormProps) {
       }
     }
 
-    // Build params from initial + current values
+    // Build params - preserve all existing params and add/update current step's values
     const params = new URLSearchParams()
-    params.set("pick", initialParams.pick || "")
-    params.set("pickRef", initialParams.pickRef || "")
-    params.set("drop", initialParams.drop || "")
-    params.set("dropRef", initialParams.dropRef || "")
+    // First, copy all existing params
+    Object.entries(initialParams).forEach(([key, value]) => {
+      if (value) params.set(key, value)
+    })
+    // Then set/update this step's values
     params.set("make", make)
     params.set("model", model)
     params.set("age", age!)
@@ -89,10 +81,9 @@ export function VehicleForm({ initialParams }: VehicleFormProps) {
 
   const buildBackHref = () => {
     const params = new URLSearchParams()
-    if (initialParams.pick) params.set("pick", initialParams.pick)
-    if (initialParams.pickRef) params.set("pickRef", initialParams.pickRef)
-    if (initialParams.drop) params.set("drop", initialParams.drop)
-    if (initialParams.dropRef) params.set("dropRef", initialParams.dropRef)
+    Object.entries(initialParams).forEach(([key, value]) => {
+      if (value) params.set(key, value)
+    })
     return `/car/questions/location?${params.toString()}`
   }
 

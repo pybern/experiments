@@ -2,18 +2,7 @@ import { redirect } from "next/navigation"
 import { AuctionForm } from "./auction-form"
 
 interface Props {
-  searchParams: Promise<{
-    pick?: string
-    pickRef?: string
-    drop?: string
-    dropRef?: string
-    make?: string
-    model?: string
-    age?: string
-    drive?: string
-    auction?: string
-    salvage?: string
-  }>
+  searchParams: Promise<Record<string, string | undefined>>
 }
 
 export default async function AuctionStep({ searchParams }: Props) {
