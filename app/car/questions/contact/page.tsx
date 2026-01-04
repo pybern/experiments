@@ -273,7 +273,7 @@ function ContactStepContent() {
 
           {/* Contact Form */}
           <div className="space-y-4">
-            <p className="text-xs text-neutral-500">
+            <p className="text-sm tracking-tight font-medium">
               We'll never share your details or send spam.
             </p>
             {/* Email Input */}

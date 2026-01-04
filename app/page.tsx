@@ -1,6 +1,6 @@
 import Image from "next/image"
 import dynamic from "next/dynamic"
-import { AnnouncementBanner } from "@/components/landing/announcement-banner"
+// import { AnnouncementBanner } from "@/components/landing/announcement-banner"
 import { Header } from "@/components/landing/header"
 import { Hero } from "@/components/landing/hero"
 import { Footer } from "@/components/landing/footer"

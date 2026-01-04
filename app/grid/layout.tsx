@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { QuoteHeader } from "@/components/quote-header"
+import { ScrollReset } from "@/components/scroll-reset"
 
 export const metadata: Metadata = {
   title: "Get a Quote - Select Your Vehicle Type",
@@ -17,6 +18,7 @@ export default function GridLayout({
 }) {
   return (
     <div className="min-h-screen bg-neutral-50">
+      <ScrollReset />
       <QuoteHeader />
       {children}
     </div>

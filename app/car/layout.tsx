@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { QuoteHeader } from "@/components/quote-header"
+import { ScrollReset } from "@/components/scroll-reset"
 
 export const metadata: Metadata = {
   title: "Car Transport Quote - WeMoveX",
@@ -17,6 +18,7 @@ export default function CarLayout({
 }) {
   return (
     <div className="min-h-screen bg-neutral-50 pb-6 md:pb-8">
+      <ScrollReset />
       <QuoteHeader />
       {children}
     </div>

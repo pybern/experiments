@@ -184,12 +184,7 @@ function LocationStepContent() {
             </div>
           </div>
 
-          {/* Info box */}
-          <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
-            <p className="text-xs text-neutral-500">
-              Start typing a city name and select from the suggestions. We service all major Australian cities and regional areas.
-            </p>
-          </div>
+
         </motion.div>
       </div>
 
